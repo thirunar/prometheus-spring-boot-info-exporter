@@ -40,7 +40,11 @@ pip install -r app/requirements.txt
 python app/exporter.py example/config.yml
 ```
 
+#### Using docker
 
+```
+docker run -p 9158:9158 -v $(pwd)/example/config.yml:/etc/prometheus-spring-boot-info-exporter/config.yml rthirucs/prometheus-spring-boot-info-exporter /etc/prometheus-spring-boot-info-exporter/config.yml
+```
 Metrics will available in http://localhost:9158
 
 
