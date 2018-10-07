@@ -9,19 +9,24 @@ Scans the spring boot services to fetch the version and converts to prometheus m
 exporter_port: 9158 # Port on which prometheus can call this exporter to get metrics
 log_level: info
 json_data_urls:
-- url: http://transaction-service.dev:8080/admin/info # Url to get json data used for fetching metric values 
-  label: transaction-service-dev
-- url: http://transaction-service.qa:8080/admin/info 
-  label: transaction-service-qa
-- url: http://user-service.dev:8080/admin/info 
-  label: user-service-dev
-- url: http://user-service.qa:8080/admin/info 
-  label: user-service-qa
-metric_name_prefix:  wallet # All metric names will be prefixed with this value
-metrics:
-- name: version 
+- url: http://userservice.dev:8080/admin/info
+  label: userservice-dev
+- url: http://userservice.qa:8080/admin/info
+  label: userservice-qa
+- url: http://userservice.prod:8080/admin/info
+  label: userservice-prod
+
+metric_name: spring_boot_info # All metric names will be prefixed with this value
+tags:
+- name: version
   description: Version of service
   path: $.app.version
+- name: stage
+  description: Deployed Stage 
+  path: $.app.stage
+- name: service_name
+  description: Name of the service
+  path: $.app.name
 ```
 
 
