@@ -1,4 +1,4 @@
-exporter_port: 9158 # Port on which prometheus can call this exporter to get metrics
+exporter_port: 9158 # Port on which prometheus can call this exporter to scrap metrics
 log_level: info
 json_data_urls:
 - url: http://userservice.dev:8080/admin/info
