@@ -22,20 +22,23 @@ class JsonPathCollector(object):
         config = self._config
         endpoints = config['json_data_urls']
         for endpoint in endpoints:
-            result = json.loads(urllib2.urlopen(endpoint['url'], timeout=10).read())
-            result_tree = Tree(result)
-            labels = ['instance_id']
-            values = [endpoint['label']]
-            for tag in config['tags']:
-                tag_name = tag['name']
-                tag_path = tag['path']
-                value = result_tree.execute(tag_path)
-                logging.info("tag_name: {}, value for '{}' : {}".format(tag_name, tag_path, value))
-                labels.append(tag_name)
-                values.append(value)
-            metric = GaugeMetricFamily(config['metric_name'], "spring boot info", labels=labels)
-            metric.add_metric(values, 1)
-            yield metric
+            try: 
+                result = json.loads(urllib2.urlopen(endpoint['url'], timeout=10).read())
+                result_tree = Tree(result)
+                labels = ['instance_id']
+                values = [endpoint['label']]
+                for tag in config['tags']:
+                    tag_name = tag['name']
+                    tag_path = tag['path']
+                    value = result_tree.execute(tag_path)
+                    logging.info("tag_name: {}, value for '{}' : {}".format(tag_name, tag_path, value))
+                    labels.append(tag_name)
+                    values.append(value)
+                metric = GaugeMetricFamily(config['metric_name'], "spring boot info", labels=labels)
+                metric.add_metric(values, 1)
+                yield metric
+            except:
+                logging.info("Could not fetch details for %s", endpoint['label'])
 
 
 if __name__ == "__main__":
@@ -53,3 +56,4 @@ if __name__ == "__main__":
         start_http_server(exporter_port)
         REGISTRY.register(JsonPathCollector(config))
     while True: time.sleep(60)
+
